@@ -36,8 +36,16 @@ async function run() {
     });
 
     
+   
     app.get('/movies', async (req, res) => {
-        const cursor = movieCollection.find();
+        const searchEmail = req.query.email; 
+        let query = {};
+        
+        if (searchEmail) {
+            query = { email: searchEmail }; 
+        }
+        
+        const cursor = movieCollection.find(query);
         const result = await cursor.toArray();
         res.send(result);
     });
