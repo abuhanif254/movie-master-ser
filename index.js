@@ -21,12 +21,10 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    
+   
 
     const movieCollection = client.db('movieMasterDB').collection('movies');
-    const watchlistCollection = client.db('movieMasterDB').collection('watchlist'); কালেকশন
-
-    
+    const watchlistCollection = client.db('movieMasterDB').collection('watchlist'); // নতুন কালেকশন
 
     
     app.post('/movies', async (req, res) => {
@@ -47,7 +45,7 @@ async function run() {
         res.send(result);
     });
 
-    
+   
     app.get('/movies/:id', async (req, res) => {
         const id = req.params.id;
         const query = { _id: new ObjectId(id) };
@@ -55,7 +53,7 @@ async function run() {
         res.send(result);
     });
 
-    
+   
     app.delete('/movies/:id', async (req, res) => {
         const id = req.params.id;
         const query = { _id: new ObjectId(id) };
@@ -63,7 +61,7 @@ async function run() {
         res.send(result);
     });
 
-    
+   
     app.put('/movies/:id', async (req, res) => {
         const id = req.params.id;
         const filter = { _id: new ObjectId(id) };
@@ -83,8 +81,6 @@ async function run() {
         const result = await movieCollection.updateOne(filter, movie, options);
         res.send(result);
     })
-
-    
 
    
     app.post('/watchlist', async (req, res) => {
@@ -110,8 +106,6 @@ async function run() {
         res.send(result);
     });
 
-   
-
     
     app.get('/stats', async (req, res) => {
         try {
@@ -130,7 +124,7 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    
+   
   }
 }
 run().catch(console.dir);
