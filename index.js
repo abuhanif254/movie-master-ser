@@ -58,6 +58,17 @@ async function run() {
         res.send(result);
     });
 
+
+    
+    app.get('/stats', async (req, res) => {
+        const movieCount = await movieCollection.estimatedDocumentCount();
+        
+        const uniqueUsers = await movieCollection.distinct('email'); 
+        const userCount = uniqueUsers.length;
+        
+        res.send({ movieCount, userCount });
+    });
+
     
     app.delete('/movies/:id', async (req, res) => {
         const id = req.params.id;
