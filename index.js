@@ -1,7 +1,3 @@
-
-
-
-
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -15,11 +11,10 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.k0txmhp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
-    strict: false,
+    strict: false, 
     deprecationErrors: true,
   }
 });
@@ -29,6 +24,9 @@ async function run() {
     
 
     const movieCollection = client.db('movieMasterDB').collection('movies');
+    const watchlistCollection = client.db('movieMasterDB').collection('watchlist'); কালেকশন
+
+    
 
     
     app.post('/movies', async (req, res) => {
@@ -87,6 +85,34 @@ async function run() {
     })
 
     
+
+   
+    app.post('/watchlist', async (req, res) => {
+        const newWatchItem = req.body;
+        console.log("Adding to watchlist", newWatchItem);
+        const result = await watchlistCollection.insertOne(newWatchItem);
+        res.send(result);
+    });
+
+    
+    app.get('/watchlist', async (req, res) => {
+        const email = req.query.email;
+        const query = { userEmail: email };
+        const result = await watchlistCollection.find(query).toArray();
+        res.send(result);
+    });
+
+    
+    app.delete('/watchlist/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await watchlistCollection.deleteOne(query);
+        res.send(result);
+    });
+
+   
+
+    
     app.get('/stats', async (req, res) => {
         try {
             const movieCount = await movieCollection.estimatedDocumentCount();
@@ -100,7 +126,7 @@ async function run() {
         }
     });
 
-   
+    
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
