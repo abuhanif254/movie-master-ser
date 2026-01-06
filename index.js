@@ -425,7 +425,7 @@ app.get('/watchlist', async (req, res) => {
 app.delete('/watchlist/:id', async (req, res) => {
     try {
         if (!watchlistCollection) {
-            return res.status(503).send({ message: "Database not connected" });
+            return res.status(503).send({ message: "Database not connected" });   // database error
         }
         const id = req.params.id;
         
